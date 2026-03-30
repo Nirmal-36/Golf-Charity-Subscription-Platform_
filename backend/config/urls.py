@@ -11,12 +11,12 @@ def home(request):
 
 urlpatterns = [
     path('', home),
-    path('admin/', admin.site.urls),
-    path('api/auth/', include('apps.accounts.urls')),
-    path('api/scores/', include('apps.scores.urls')),
-    path('api/charities/', include('apps.charities.urls')),
-    path('api/subscriptions/', include('apps.subscriptions.urls')),
-    path('api/draws/', include('apps.draws.urls')),
+    # path('admin/', admin.site.urls),
+    # path('api/auth/', include('apps.accounts.urls')),
+    # path('api/scores/', include('apps.scores.urls')),
+    # path('api/charities/', include('apps.charities.urls')),
+    # path('api/subscriptions/', include('apps.subscriptions.urls')),
+    # path('api/draws/', include('apps.draws.urls')),
 ]
 
 if settings.DEBUG:
