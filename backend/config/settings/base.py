@@ -61,6 +61,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+ROOT_URLCONF = 'config.urls'
+
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = config(
@@ -93,20 +95,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# Persistence Layer: Default SQLite for development, Postgres for Production
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+import dj_database_url
 
-# Production Grade: Supabase/Postgres dynamic allocation
-SUPABASE_DB_URL = config('DATABASE_URL', default='')
-if SUPABASE_DB_URL:
-    import dj_database_url
-    DATABASES['default'] = dj_database_url.config(default=SUPABASE_DB_URL, conn_max_age=600)
+DATABASES = {
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
+}
 
 # Security: Password validation protocols
 AUTH_PASSWORD_VALIDATORS = [
