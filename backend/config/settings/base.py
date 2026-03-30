@@ -13,12 +13,14 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-dev-key-change-me')
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='django-insecure-dev-key-change-me')
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=lambda v: [s.strip() for s in v.split(',')])
-if os.environ.get('VERCEL_URL'):
-    ALLOWED_HOSTS.append(os.environ.get('VERCEL_URL'))
-    ALLOWED_HOSTS.append('.vercel.app')
+
+ALLOWED_HOSTS = config(
+    'ALLOWED_HOSTS',
+    default='',
+    cast=lambda v: [s.strip() for s in v.split(',') if s]
+)
 
 # Application Registry: Core Business Domain & Third-Party Integrations
 INSTALLED_APPS = [
@@ -33,7 +35,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
-    'django_celery_beat',
     
     # Domain Apps: The functional heart of the platform
     'apps.accounts',
@@ -42,6 +43,9 @@ INSTALLED_APPS = [
     'apps.subscriptions',
     'apps.draws',
 ]
+
+if not os.environ.get("VERCEL"):
+    INSTALLED_APPS += ['django_celery_beat']
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -57,9 +61,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL', default=True, cast=bool)
+CORS_ALLOW_ALL_ORIGINS = False
 
-ROOT_URLCONF = 'config.urls'
+CORS_ALLOWED_ORIGINS = config(
+    "CORS_ALLOWED_ORIGINS",
+    default="",
+    cast=lambda v: [s.strip() for s in v.split(",") if s]
+)
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app"
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 TEMPLATES = [
     {

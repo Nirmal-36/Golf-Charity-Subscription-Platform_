@@ -1,48 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "backend/vercel_app.py",
-      "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.12"
-      }
-    },
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
+  "framework": "vite",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "backend/vercel_app.py"
-    },
-    {
-      "source": "/admin/(.*)",
-      "destination": "backend/vercel_app.py"
-    },
-    {
-      "source": "/static/admin/(.*)",
-      "destination": "backend/vercel_app.py"
-    },
-    {
-      "source": "/media/(.*)",
-      "destination": "backend/vercel_app.py"
-    },
-    {
-      "source": "/((?!api|admin|static/admin|media|assets|favicon.svg|logo.*|.*\\.js|.*\\.css|.*\\.png|.*\\.jpg).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/draws/admin/draws/sync/",
-      "schedule": "0 0 1 * *"
     }
   ]
 }
