@@ -6,7 +6,11 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+def home(request):
+    return JsonResponse({"status": "Backend is running 🚀"})
+
 urlpatterns = [
+    path('', home),
     path('admin/', admin.site.urls),
     path('api/auth/', include('apps.accounts.urls')),
     path('api/scores/', include('apps.scores.urls')),
